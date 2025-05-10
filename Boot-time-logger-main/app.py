@@ -3,6 +3,9 @@ import os
 import pandas as pd
 from openpyxl import Workbook, load_workbook
 from twilio.rest import Client
+from dotenv import load_dotenv
+
+load_dotenv()  # Load .env file
 
 def boot_time():
     global today, day_of_week
@@ -21,31 +24,33 @@ def boot_time():
     else:
         wb = Workbook()
         ws = wb.active
-        headers = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
-        for i,h in enumerate(headers,1):
+        headers = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        for i, h in enumerate(headers, 1):
             ws.cell(row=1, column=i, value=h)
 
-    cols = {'Mon':1,'Tue':2,'Wed':3,'Thu':4,'Fri':5,'Sat':6,'Sun':7}
+    cols = {'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6, 'Sun': 7}
     col = cols[day_of_week]
     nr = ws.max_row + 1
-    ws.cell(row=nr,   column=col, value=str(today.date()))
-    ws.cell(row=nr+1, column=col, value=str(today.time()))
+    ws.cell(row=nr, column=col, value=str(today.date()))
+    ws.cell(row=nr + 1, column=col, value=str(today.time()))
 
     try:
         wb.save(fn)
     except PermissionError:
-        # bubble up a clear error
         raise PermissionError("Cannot write to boot_logs.xlsx – please close it in Excel and try again.")
 
     # — WhatsApp —
     send_whatsapp_message(today, day_of_week)
 
-
 def send_whatsapp_message(boot_time, day_of_week):
-    account_sid   = ''
-    auth_token    = ''
-    from_whatsapp = ""
-    to_whatsapp   = ""
+    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+    from_whatsapp = "whatsapp:+14155238886"
+    to_whatsapp = "whatsapp:+918374572979"
+
+    if not account_sid or not auth_token:
+        print("Missing Twilio credentials in environment variables.")
+        return
 
     client = Client(account_sid, auth_token)
     client.messages.create(

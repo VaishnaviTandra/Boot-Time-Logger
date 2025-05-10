@@ -1,0 +1,17 @@
+# Python cache and environment files
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+
+# Excel and text logs
+boot_logs.xlsx
+boot_logs.txt
+
+# System files
+.DS_Store
+Thumbs.db
+
+# VSCode or IDE settings (optional)
+.vscode/
+.idea/
