@@ -42,10 +42,10 @@ def boot_time():
 
 
 def send_whatsapp_message(boot_time, day_of_week):
-    account_sid   = 'AC5cb4407ae5280663d545b3eb30af7470'
-    auth_token    = '6c81ed3bd5991688b7fd139774a519c4'
-    from_whatsapp = "whatsapp:+14155238886"
-    to_whatsapp   = "whatsapp:+918374572979"
+    account_sid   = ''
+    auth_token    = ''
+    from_whatsapp = ""
+    to_whatsapp   = ""
 
     client = Client(account_sid, auth_token)
     client.messages.create(
